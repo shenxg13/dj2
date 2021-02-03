@@ -18,7 +18,7 @@ if RUN_VER == "open":
 else:
     from blueapps.patch.settings_paas_services import *  # noqa
 
-os.environ['ORACLE_HOME'] = '/oracle/app/oracle/product/11.2.0/db_1'
+# os.environ['ORACLE_HOME'] = '/oracle/app/oracle/product/11.2.0/db_1'
 
 # 预发布环境
 RUN_MODE = "STAGING"
