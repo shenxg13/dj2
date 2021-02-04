@@ -42,7 +42,7 @@ def get_env_or_raise(key):
 # 应用 ID
 APP_CODE = "dj2"
 # 应用用于调用云 API 的 Secret
-SECRET_KEY = "8210cd20-39db-4268-a962-42c375ea7181"
+SECRET_KEY = "1d78ba5c-c59c-4cb6-975c-4ddaa9f0504c"
 
 # SaaS运行版本，如非必要请勿修改
 RUN_VER = "open"
