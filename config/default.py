@@ -34,6 +34,8 @@ from blueapps.conf.log import get_logging_config_dict
 # 请在这里加入你的自定义 APP
 INSTALLED_APPS += (  # noqa
     "hello",
+    "base",
+    "oramgt",
 )
 
 # 这里是默认的中间件，大部分情况下，不需要改动
@@ -85,13 +87,13 @@ STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]  # noqa
 # 不使用时，请修改为 False，并删除项目目录下的 Procfile 文件中 celery 配置
 IS_USE_CELERY = True
 
-CELERY_RESULT_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = "json"
 
-CELERY_TASK_SERIALIZER = 'pickle'
+CELERY_TASK_SERIALIZER = "pickle"
 
-CELERY_ACCEPT_CONTENT = ['pickle', 'json', 'msgpack', 'yaml']
+CELERY_ACCEPT_CONTENT = ["pickle", "json", "msgpack", "yaml"]
 
-CELERY_RESULT_BACKEND = 'django-db'
+CELERY_RESULT_BACKEND = "django-db"
 
 # 前后端分离开发配置开关，设置为True时dev和stag环境会自动加载允许跨域的相关选项
 FRONTEND_BACKEND_SEPARATION = False

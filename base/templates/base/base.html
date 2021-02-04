@@ -1,0 +1,98 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Oracle数据库管理</title>
+
+    <link rel="shortcut icon" href="{%static "base/images/favicon.ico" %}" />
+
+    <link href="{% static 'base/css/coreui.css' %}" rel="stylesheet">
+    <link href="{% static 'base/css/free.css' %}" rel="stylesheet">
+    <script src="{% static 'base/js/jquery-3.5.1.min.js' %}"></script>
+</head>
+
+<body class="c-app">
+    <script src="{% static 'base/js/coreui.bundle.js' %}"></script>
+    <div class="c-sidebar c-sidebar-fixed c-sidebar-show">
+        <div class="c-sidebar-brand d-md-down-none">
+            <img height="40" src="{% static 'base/images/msbank_logo_mono.png' %}" alt="">
+        </div>
+        <ul class="c-sidebar-nav">
+            <li class="c-sidebar-nav-title">Oracle数据库管理</li>
+            <li class="c-sidebar-nav-item">
+                <a class="c-sidebar-nav-link" href="#">
+                    <i class="c-sidebar-nav-icon cil-speedometer"></i>控制面板
+                </a>
+            </li>
+            <li class="c-sidebar-nav-item">
+                <a class="c-sidebar-nav-link" href="#">
+                    <i class="c-sidebar-nav-icon cil-spreadsheet"></i>数据库列表
+                </a>
+            </li>
+            <li class="c-sidebar-nav-item">
+                <a class="c-sidebar-nav-link" href="#">
+                    <i class="c-sidebar-nav-icon cil-notes"></i>AWR报告
+                </a>
+            </li>
+            <li class="c-sidebar-nav-item">
+                <a class="c-sidebar-nav-link" href="#">
+                    <i class="c-sidebar-nav-icon cil-notes"></i>巡检报告
+                </a>
+            </li>
+            <li class="c-sidebar-nav-item">
+                <a class="c-sidebar-nav-link" href="#">
+                    <i class="c-sidebar-nav-icon cil-monitor"></i>日志监控
+                </a>
+            </li>
+            <li class="c-sidebar-nav-item">
+                <a class="c-sidebar-nav-link" href="#">
+                    <i class="c-sidebar-nav-icon cil-monitor"></i>表空间监控
+                </a>
+            </li>
+            <li class="c-sidebar-nav-item">
+                <a class="c-sidebar-nav-link" href="#">
+                    <i class="c-sidebar-nav-icon cil-monitor"></i>ASM监控
+                </a>
+            </li>
+        </ul>
+    </div>
+    <div class="c-wrapper">
+        <header class="c-header c-header-fixed">
+            <div class="c-subheader border-top-0 mt-0 px-3 bg-gray-300">
+                <div class="c-header-brand px-3">
+                    <h5 class="m-0">{% block headertitle %}{% endblock %}</h5>
+                </div>
+            </div>
+            <div class="c-subheader border-top-0 mt-0 justify-content-between px-3">
+                <ol class="breadcrumb border-0 m-0">
+                    {% block breadcrumb %}{% endblock %}
+                </ol>
+                {% block search %}{% endblock %}
+            </div>
+        </header>
+        <div class="c-body">
+            <main class="c-main">
+                <div class="container">
+                    {% block content %}{% endblock %}
+                </div>
+            </main>
+        </div>
+        <footer class="c-footer bg-gray-300">
+            <div class="container-fluid">
+            <div class="row">
+                <span>蒙商银行 版权所有</span>
+            </div>
+            <div class="row">
+                <span>Powered by CoreUI</span>
+            </div>
+        </div>
+        </footer>
+    </div>
+</body>
+
+</html>

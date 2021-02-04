@@ -13,12 +13,12 @@ specific language governing permissions and limitations under the License.
 
 from django.conf.urls import include, url
 from django.contrib import admin
-from hello import views
+from base import views
 
 urlpatterns = [
     url(r"^admin/", admin.site.urls),
     url(r"^account/", include("blueapps.account.urls")),
-    url(r"^$", views.hello),
+    url(r"^$", views.index),
     url(r"^hello/", include("hello.urls")),
     url(r"^i18n/", include("django.conf.urls.i18n")),
 ]
