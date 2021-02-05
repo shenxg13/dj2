@@ -10,6 +10,7 @@ Unless required by applicable law or agreed to in writing, software distributed 
 an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
+from blueapps.conf.default_settings import BASE_DIR
 from config import RUN_VER
 from config.default import FRONTEND_BACKEND_SEPARATION
 
@@ -30,6 +31,8 @@ RUN_MODE = "DEVELOP"
 
 # APP本地静态资源目录
 STATIC_URL = "/static/"
+
+STATIC_ROOT = os.path.join(BASE_DIR, "static")
 
 # APP静态资源目录url
 # REMOTE_STATIC_URL = '%sremote/' % STATIC_URL
