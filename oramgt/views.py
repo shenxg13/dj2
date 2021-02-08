@@ -10,7 +10,7 @@ import os
 from blueapps.account.decorators import login_exempt
 
 
-@login_exempt
+# @login_exempt
 def db_list(request, *args, **kwargs):
     db_list_all = OraDbInfo.objects.all().order_by("id")
     # paged = common_paginator(request, db_list_all, 10)
@@ -32,7 +32,7 @@ def db_list(request, *args, **kwargs):
 #         return redirect(reverse("db_list"))
 
 
-@login_exempt
+# @login_exempt
 def db_retire(request, *args, **kwargs):
     db_id = request.POST.get("db-id")
     db = OraDbInfo.objects.get(id=db_id)
@@ -41,7 +41,7 @@ def db_retire(request, *args, **kwargs):
     return redirect(reverse("db_list"))
 
 
-@login_exempt
+# @login_exempt
 def db_edit(request, *args, **kwargs):
     if request.method == "POST":
         db_id = request.POST.get("db-id")
