@@ -10,4 +10,4 @@ from blueapps.account.decorators import login_exempt
 
 @login_exempt
 def index(request, *args, **kwargs):
-    return render(request, "base/index.html")
+    return redirect(reverse("db_list"))

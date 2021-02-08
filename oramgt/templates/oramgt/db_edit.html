@@ -1,0 +1,198 @@
+{% extends 'base/base.html' %}
+
+{% block headertitle %}
+    {% if db %}
+        更新Oracle数据库
+    {% else %}
+        新建Oracle数据库
+    {% endif %}
+{% endblock %}
+
+{% block breadcrumb %}
+    <li class="breadcrumb-item">Home</li>
+    <li class="breadcrumb-item">
+        <a href="{% url 'db_list' %}">数据库列表</a>
+    </li>
+    <li class="breadcrumb-item">
+        {% if db %}
+            {{ db.hostname }}_{{ db.ip_addr }}_{{ db.port_num }}_{{ db.inst_name }}
+        {% else %}
+            新建数据库
+        {% endif %}
+    </li>
+{% endblock %}
+
+{% block content %}
+    <div class="card">
+        <div class="card-body">
+            <form id="dbnew-form" method="post" action="{% url 'db_edit' %}">
+                {% csrf_token %}
+                <input type="hidden" id='db-id' name="db-id" value="{{ db.id }}"/>
+                <div class="form-group row">
+                    <label for="hostname" class="col-2 col-form-label text-right">主机名</label>
+                    <div class="col-10">
+                        <input type="text" class="form-control w-50" id="hostname" name="hostname" placeholder="输入主机名" required="required" {% if db %}value="{{ db.hostname }}"{% endif %}>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="ip-addr" class="col-2 col-form-label text-right">IP地址</label>
+                    <div class="col-10">
+                        <input type="text" class="form-control w-50" id="ip-addr" name="ip-addr" placeholder="单机和RAC使用本机IP，双机热备使用服务IP" required="required" {% if db %}value="{{ db.ip_addr }}"{% endif %}>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="port-num" class="col-2 col-form-label text-right">端口号</label>
+                    <div class="col-10">
+                        <input type="number" class="form-control w-25" id="port-num" name="port-num" placeholder="输入端口号" required="required" {% if db %}value="{{ db.port_num }}"{% endif %}>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="db-name" class="col-2 col-form-label text-right">服务名</label>
+                    <div class="col-10">
+                        <input type="text" class="form-control w-50" id="db-name" name="db-name" placeholder="输入数据库名称" required="required" {% if db %}value="{{ db.srv_name }}"{% endif %}>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="inst-name" class="col-2 col-form-label text-right">实例名</label>
+                    <div class="col-10">
+                        <input type="text" class="form-control w-50" id="inst-name" name="inst-name" placeholder="输入实例名称" required="required" {% if db %}value="{{ db.inst_name }}"{% endif %}>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="username" class="col-2 col-form-label text-right">用户名</label>
+                    <div class="col-10">
+                        <input type="text" class="form-control w-25" id="username" name="username" placeholder="输入用户名" required="required" {% if db %}value="{{ db.username }}"{% endif %}>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="password" class="col-2 col-form-label text-right">密码</label>
+                    <div class="col-10">
+                        <input type="text" class="form-control w-25" id="password" name="password" placeholder="输入密码" required="required" {% if db %}value="{{ db.password }}"{% endif %}>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-2 col-form-label text-right">启用AWR报告</label>
+                    <div class="col-10 col-form-label">
+                        <div class="form-check form-check-inline mr-1">
+                            <input class="form-check-input" id="awr-true" name="enable-awr" type="radio" value="True" {% if db.awr_enabled == True %}checked{% endif %}>
+                            <label class="form-check-label" for="awr-true">是</label>
+                        </div>
+                        <div class="form-check form-check-inline mr-1">
+                            <input class="form-check-input" id="awr-false" name="enable-awr" type="radio" value="False" {% if db == None or db.awr_enabled == False %}checked{% endif %}>
+                            <label class="form-check-label" for="awr-false">否</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-2 col-form-label text-right">启用巡检报告</label>
+                    <div class="col-10 col-form-label">
+                        <div class="form-check form-check-inline mr-1">
+                            <input class="form-check-input" id="insp-true" name="enable-insp" type="radio" value="True" {% if db.insp_enabled == True %}checked{% endif %}>
+                            <label class="form-check-label" for="insp-true">是</label>
+                        </div>
+                        <div class="form-check form-check-inline mr-1">
+                            <input class="form-check-input" id="insp-flase" name="enable-insp" type="radio" value="False" {% if db == None or db.insp_enabled == False %}checked{% endif %}>
+                            <label class="form-check-label" for="insp-flase">否</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-2 col-form-label text-right">启用日志监控</label>
+                    <div class="col-10 col-form-label">
+                        <div class="form-check form-check-inline mr-1">
+                            <input class="form-check-input" id="logmon-true" name="enable-logmon" type="radio" value="True" {% if db.logmon_enabled == True %}checked{% endif %}>
+                            <label class="form-check-label" for="logmon-true">是</label>
+                        </div>
+                        <div class="form-check form-check-inline mr-1">
+                            <input class="form-check-input" id="logmon-false" name="enable-logmon" type="radio" value="False" {% if db == None or db.logmon_enabled == False %}checked{% endif %}>
+                            <label class="form-check-label" for="logmon-false">否</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-2 col-form-label text-right">启用表空间监控</label>
+                    <div class="col-10 col-form-label">
+                        <div class="form-check form-check-inline mr-1">
+                            <input class="form-check-input" id="tsmon-true" name="enable-tsmon" type="radio" value="True" {% if db.tsmon_enabled == True %}checked{% endif %}>
+                            <label class="form-check-label" for="tsmon-true">是</label>
+                        </div>
+                        <div class="form-check form-check-inline mr-1">
+                            <input class="form-check-input" id="tsmon-false" name="enable-tsmon" type="radio" value="False" {% if db == None or db.tsmon_enabled == False %}checked{% endif %}>
+                            <label class="form-check-label" for="tsmon-false">否</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-2 col-form-label text-right">启用ASM监控</label>
+                    <div class="col-10 col-form-label">
+                        <div class="form-check form-check-inline mr-1">
+                            <input class="form-check-input" id="asmmon-true" name="enable-asmmon" type="radio" value="True" {% if db.asmmon_enabled == True %}checked{% endif %}>
+                            <label class="form-check-label" for="asmmon-true">是</label>
+                        </div>
+                        <div class="form-check form-check-inline mr-1">
+                            <input class="form-check-input" id="asmmon-false" name="enable-asmmon" type="radio" value="False" {% if db == None or db.asmmon_enabled == False %}checked{% endif %}>
+                            <label class="form-check-label" for="asmmon-false">否</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-2 col-form-label text-right">上线</label>
+                    <div class="col-10 col-form-label">
+                        <div class="form-check form-check-inline mr-1">
+                            <input class="form-check-input" id="prod-true" name="prod" type="radio" value="True" {% if db == None or db.production == True %}checked{% endif %}>
+                            <label class="form-check-label" for="prod-true">是</label>
+                        </div>
+                        <div class="form-check form-check-inline mr-1">
+                            <input class="form-check-input" id="prod-false" name="prod" type="radio" value="False" {% if db.production == False %}checked{% endif %}>
+                            <label class="form-check-label" for="prod-false">否</label>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="card-footer">
+            <div id="test-connection-result">
+            </div>
+            <button id="test-connection-btn" class="btn btn-success" onclick="testConnection()">测试连接</button>
+            <button type="submit" class="btn btn-dark" form="dbnew-form">保存</button>
+        </div>
+    </div>
+    <script type="text/javascript">
+        function testConnection(){
+            const testSucessAlert = '<div class="alert alert-success alert-dismissable" role="alert">'
+                + ' <button type="button" class="close" data-dismiss="alert" aria-hidden="true">'
+                + '&times;'
+                + '</button>'
+                + '测试连接数据库成功'
+                + '</div>';
+            const testFailedAlert = '<div class="alert alert-danger alert-dismissable" role="alert">'
+                + ' <button type="button" class="close" data-dismiss="alert" aria-hidden="true">'
+                + '&times;'
+                + '</button>'
+                + '测试连接数据库失败'
+                + '<br>'
+                + '原因：'
+                + '<span id="failed-reason"></span>'
+                + '</div>';
+            const testConnectionResult = $('#test-connection-result');
+            $.ajax({
+                cache:false,
+                type: "POST",
+                dataType: "json",
+                url: "{% url 'test_connection' %}",
+                data: $('#dbnew-form').serialize(),
+                success: function (data) {
+                    if(data.result === "success"){
+                        testConnectionResult.empty()
+                        testConnectionResult.append(testSucessAlert)
+                    }
+                    if(data.result === "failed"){
+                        testConnectionResult.empty()
+                        testConnectionResult.append(testFailedAlert)
+                        $('#failed-reason').text(data.reason)
+                    }
+                }
+            });
+        }
+    </script>
+{% endblock %}

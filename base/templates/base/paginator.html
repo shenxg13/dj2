@@ -1,0 +1,28 @@
+<ul class="pagination">
+    <li class="page-item">
+        <a class="page-link" href="{% url paginator_url %}?p={{ paged.previous_page }}" aria-label="Previous">
+            <span aria-hidden="true">&laquo;</span>
+        </a>
+    </li>
+    {% if paged.paged_obj.has_previous and paged.previous_page > 1 %}
+        <li class="page-item"><a class="page-link" href="{% url paginator_url %}?p=1">1</a></li>
+        <li class="page-item"><a class="page-link">...</a></li>
+    {% endif %}
+    {% if paged.paged_obj.has_previous %}
+        <li class="page-item"><a class="page-link" href="{% url paginator_url %}?p={{ paged.previous_page }}">{{ paged.previous_page }}</a></li>
+    {% endif %}
+    <li class="page-item active"><a class="page-link">{{ paged.current_page }}</a></li>
+    {% if paged.paged_obj.has_next %}
+        <li class="page-item"><a class="page-link" href="{% url paginator_url %}?p={{ paged.next_page }}">{{ paged.next_page }}</a></li>
+    {% endif %}
+    {% if paged.paged_obj.has_next and paged.next_page < paged.last_page %}
+        <li class="page-item"><a class="page-link">...</a></li>
+        <li class="page-item"><a class="page-link" href="{% url paginator_url %}?p={{ paged.last_page }}">{{ paged.last_page }}</a></li>
+    {% endif %}
+    <li class="page-item">
+        <a class="page-link" href="{% url paginator_url %}?p={{ paged.next_page }}" aria-label="Next">
+            <span aria-hidden="true">&raquo;</span>
+        </a>
+    </li>
+    <li class="page-item align-self-center m-2">共{{ paged.record_count }}项</li>
+</ul>

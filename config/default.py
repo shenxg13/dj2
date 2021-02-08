@@ -33,6 +33,7 @@ from blueapps.conf.log import get_logging_config_dict
 
 # 请在这里加入你的自定义 APP
 INSTALLED_APPS += (  # noqa
+    # "haystack",
     "hello",
     "base",
     "oramgt",
@@ -80,8 +81,6 @@ MIDDLEWARE += ()  # noqa
 STATIC_VERSION = "1.0"
 
 STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]  # noqa
-
-# STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 
 # CELERY 开关，使用时请改为 True，修改项目目录下的 Procfile 文件，添加以下两行命令：
 # worker: python manage.py celery worker -l info
@@ -137,6 +136,16 @@ LANGUAGES = (
     ("en", u"English"),
     ("zh-hans", u"简体中文"),
 )
+
+# HAYSTACK_CONNECTIONS = {
+#     'default': {
+#         'ENGINE': 'elasticstack.backends.ConfigurableElasticSearchEngine',
+#         'URL': 'http://shenxg13.asuscomm.com:9200/',
+#         'TIMEOUT': 60 * 5,
+#         'INDEX_NAME': 'oramgt',
+#     },
+# }
+
 
 """
 以下为框架代码 请勿修改

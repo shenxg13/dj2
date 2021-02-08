@@ -18,7 +18,8 @@ from base import views
 urlpatterns = [
     url(r"^admin/", admin.site.urls),
     url(r"^account/", include("blueapps.account.urls")),
-    url(r"^$", views.index),
-    url(r"^hello/", include("hello.urls")),
     url(r"^i18n/", include("django.conf.urls.i18n")),
+    url(r"^$", views.index),
+    url(r"^oramgt/", include("oramgt.urls")),
+    url(r"^hello/", include("hello.urls")),
 ]

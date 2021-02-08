@@ -1,0 +1,156 @@
+{% extends 'base/base.html' %}
+
+{% block headertitle %}
+    Oracle数据库列表
+{% endblock %}
+
+{% block breadcrumb %}
+    <li class="breadcrumb-item">Home</li>
+    <li class="breadcrumb-item">数据库列表</li>
+{% endblock %}
+
+{% block search %}
+        <div class="input-group w-25 align-self-center">
+            <input id="query-string" name="q" type="text" class="form-control" placeholder="搜索数据库列表" aria-label="">
+            <div class="input-group-append">
+                <button class="btn btn-outline-secondary" type="button" id="query-btn" onclick="goSearch()">搜索</button>
+                <button class="btn btn-outline-secondary" type="button" id="clean-btn" onclick="cleanQuery()">清除</button>
+            </div>
+        </div>
+{% endblock %}
+
+{% block content %}
+    <div class="card">
+        <div class="card-header d-flex justify-content-end">
+            <a type="button" class="btn btn-dark" href="{% url 'db_edit' %}">新建</a>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-light table-hover text-nowrap">
+                    <thead>
+                        <tr>
+                            <th>编号</th>
+                            <th>主机名</th>
+                            <th>IP地址</th>
+                            <th>端口号</th>
+                            <th>服务名</th>
+                            <th>实例名</th>
+                            <th>用户名</th>
+                            <th>AWR报告</th>
+                            <th>巡检报告</th>
+                            <th>日志监控</th>
+                            <th>表空间监控</th>
+                            <th>ASM监控</th>
+                            <th>上线</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for db in paged.paged_obj %}
+                        <tr>
+                            <td>{{ db.id }}</td>
+                            <td>{{ db.hostname }}</td>
+                            <td>{{ db.ip_addr }}</td>
+                            <td>{{ db.port_num }}</td>
+                            <td>{{ db.srv_name }}</td>
+                            <td>{{ db.inst_name }}</td>
+                            <td>{{ db.username }}</td>
+                            <td>
+                                {% if db.awr_enabled == True %}
+                                    <span class="badge badge-success">是</span>
+                                {% else %}
+                                    <span class="badge badge-danger">否</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if db.insp_enabled == True %}
+                                    <span class="badge badge-success">是</span>
+                                {% else %}
+                                    <span class="badge badge-danger">否</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if db.logmon_enabled == True %}
+                                    <span class="badge badge-success">是</span>
+                                {% else %}
+                                    <span class="badge badge-danger">否</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if db.tsmon_enabled == True %}
+                                    <span class="badge badge-success">是</span>
+                                {% else %}
+                                    <span class="badge badge-danger">否</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if db.asmmon_enabled == True %}
+                                    <span class="badge badge-success">是</span>
+                                {% else %}
+                                    <span class="badge badge-danger">否</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if db.production == True %}
+                                    <span class="badge badge-success">是</span>
+                                {% else %}
+                                    <span class="badge badge-danger">否</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <div class="btn-group btn-group-sm" role="group" aria-label="dblist button group">
+                                    <a type="button" class="btn btn-secondary" href="{% url 'db_edit' %}?id={{ db.id }}">更新</a>
+                                    <a type="button" class="btn btn-secondary" onclick="retireCfm('{{ db.id }}', '{{ db.hostname }}', '{{ db.ip_addr }}', '{{ db.port_num }}', '{{ db.srv_name }}')">
+                                        {% if db.production == True %}
+                                            下线
+                                        {% else %}
+                                            上线
+                                        {% endif %}
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+{#                {% if 'db_list' in request.path %}#}
+{#                    {% include 'base/paginator.html' %}#}
+{#                {% endif %}#}
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="delete-modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <form id="delete-form" method="post" action="{% url 'db_retire' %}">
+                        {% csrf_token %}
+                        <input type="hidden" id='db-id' name="db-id"/>
+                    </form>
+                    确定下线
+                    <span id="db-info"></span>
+                    ？
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+                    <button form="delete-form" type="submit" class="btn btn-danger">确定</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript">
+        function retireCfm(id, hostname, ipAddr, portNum, dbName){
+            const dbInfo = hostname + '_' + ipAddr + '_' + portNum + '_' + dbName
+            $('#delete-modal').modal();
+            $('#db-id').val(id);
+            $('#db-info').text(dbInfo);
+        }
+        function goSearch(){
+            const q = $('#query-string').val()
+            window.location.href = '{% url 'db_list' %}' + '?' + 'q=' + q
+        }
+        function cleanQuery(){
+            window.location.href = '{% url 'db_list' %}'
+        }
+    </script>
+{% endblock %}

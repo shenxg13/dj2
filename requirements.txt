@@ -13,7 +13,7 @@ requests==2.22.0
 python-json-logger==0.1.7
 whitenoise==3.3.0
 six==1.11.0
-cx-Oracle==8.1.0
 
+cx-Oracle==8.1.0
 django-haystack==3.0
 elasticsearch==5.5.3
