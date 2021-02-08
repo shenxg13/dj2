@@ -10,7 +10,7 @@ import os
 from blueapps.account.decorators import login_exempt
 
 
-# @login_exempt
+@login_exempt
 def db_list(request, *args, **kwargs):
     db_list_all = OraDbInfo.objects.all().order_by("id")
     # paged = common_paginator(request, db_list_all, 10)
@@ -32,7 +32,7 @@ def db_list(request, *args, **kwargs):
 #         return redirect(reverse("db_list"))
 
 
-# @login_exempt
+@login_exempt
 def db_retire(request, *args, **kwargs):
     db_id = request.POST.get("db-id")
     db = OraDbInfo.objects.get(id=db_id)
@@ -41,7 +41,7 @@ def db_retire(request, *args, **kwargs):
     return redirect(reverse("db_list"))
 
 
-# @login_exempt
+@login_exempt
 def db_edit(request, *args, **kwargs):
     if request.method == "POST":
         db_id = request.POST.get("db-id")
@@ -88,3 +88,46 @@ def db_edit(request, *args, **kwargs):
         else:
             db = None
         return render(request, "oramgt/db_edit.html", {"db": db})
+
+
+@login_exempt
+def test_connection(request, *args, **kwargs):
+    ip_addr = request.POST.get('ip-addr')
+    port_num = request.POST.get('port-num')
+    srv_name = request.POST.get('db-name')
+    username = request.POST.get('username')
+    password = request.POST.get('password')
+    conn_str = f'{ip_addr}:{port_num}/{srv_name}'
+    try:
+        with cx_Oracle.connect(username, password, conn_str) as conn:
+            with conn.cursor() as cur:
+                sql_test = 'select 1 from dual'
+                test_result = cur.execute(sql_test).fetchall()
+                if test_result[0][0] == 1:
+                    return JsonResponse({'result': 'success'})
+                else:
+                    return JsonResponse({'result': 'failed', 'reason': 'unknown'})
+    except Exception as e:
+        return JsonResponse({'result': 'failed', 'reason': str(e)})
+
+
+@login_exempt
+def creat_db():
+    for i in range(0, 100):
+        hostname = i * 10 + 1
+        ip_addr = i * 10 + 2
+        port_num = i * 10 + 3
+        srv_name = i * 10 + 4
+        inst_name = i * 10 + 5
+        username = i * 10 + 6
+        password = i * 10 + 7
+        awr_enabled = True
+        insp_enabled = True
+        tsmon_enabled = False
+        asmmon_enabled = False
+        production = True
+        ora_db_info = OraDbInfo(hostname=hostname, ip_addr=ip_addr, port_num=port_num, srv_name=srv_name,
+                                inst_name=inst_name, username=username, password=password, awr_enabled=awr_enabled,
+                                insp_enabled=insp_enabled, tsmon_enabled=tsmon_enabled,
+                                asmmon_enabled=asmmon_enabled, production=production)
+        ora_db_info.save()

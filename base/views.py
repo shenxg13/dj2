@@ -8,6 +8,6 @@ import cx_Oracle
 from blueapps.account.decorators import login_exempt
 
 
-# @login_exempt
+@login_exempt
 def index(request, *args, **kwargs):
     return redirect(reverse("db_list"))
